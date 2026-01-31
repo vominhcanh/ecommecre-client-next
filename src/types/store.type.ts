@@ -1,0 +1,35 @@
+export interface StoreType {
+    id: number;
+    code: string;
+    name: string;
+    lat: string;
+    long: string;
+    description: string | null;
+    address: string;
+    contact_phone: string;
+    email: string;
+    email_notify: string | null;
+    token: string;
+    avatar: string;
+    company_id: number;
+    company_code: string;
+    company_name: string;
+    batch_id: number | null;
+    batch_code: string | null;
+    batch_name: string | null;
+    warehouse_id: number | null;
+    warehouse_code: string | null;
+    warehouse_name: string | null;
+    city_code: string;
+    city_type: string;
+    city_name: string;
+    district_code: string;
+    district_type: string;
+    district_name: string;
+    ward_code: string;
+    ward_type: string;
+    ward_name: string;
+    is_active: number;
+    created_at: string;
+    updated_at: string;
+}

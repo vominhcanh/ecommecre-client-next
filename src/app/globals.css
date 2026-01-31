@@ -1,0 +1,254 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Fix: Prevent scrollbar hiding when Modal/Select opens */
+
+
+/* Prevent layout shift when modal opens */
+
+/* When HeroUI adds overflow-hidden, preserve width */
+
+/* HeroUI overlays should be below sticky header */
+[data-slot="backdrop"],
+[role="dialog"],
+.hero-ui-overlay {
+  z-index: 9998 !important;
+}
+
+/* HeroUI Custom Overrides - Remove default borders from inputs */
+[data-slot="input-wrapper"],
+[data-slot="select-wrapper"],
+[data-slot="textarea-wrapper"] {
+  border: none !important;
+}
+
+/* Remove focus outline/ring completely */
+[data-slot="input-wrapper"]:focus-within,
+[data-slot="select-wrapper"]:focus-within,
+[data-slot="textarea-wrapper"]:focus-within,
+[data-slot="input"]:focus,
+[data-slot="select"]:focus,
+[data-slot="textarea"]:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Remove native input outline */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none !important;
+}
+
+/* Override HeroUI focus ring */
+[data-focus="true"],
+[data-focus-visible="true"],
+[data-focus-within="true"] {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html * {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  line-height: 28px;
+  font-weight: 400;
+  font-family: var(--font-gilroy), sans-serif !important;
+}
+
+:root {
+  --swiper-theme-color: #3b82f6;
+  --swiper-navigation-size: 24px;
+}
+
+/* Custom styling for Swiper carousel */
+.products-carousel .swiper-button-next,
+.products-carousel .swiper-button-prev {
+  background-color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.products-carousel .swiper-button-next:after,
+.products-carousel .swiper-button-prev:after {
+  font-size: 18px;
+  font-weight: bold;
+  color: #3b82f6;
+}
+
+.products-carousel .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: #cbd5e1;
+  opacity: 0.5;
+}
+
+.products-carousel .swiper-pagination-bullet-active {
+  background: #3b82f6;
+  opacity: 1;
+}
+
+/* Product card hover effects */
+.products-carousel .swiper-slide {
+  height: auto;
+  padding-bottom: 10px;
+}
+
+/* Add a subtle hover effect for product cards */
+.products-carousel .swiper-slide a {
+  display: block;
+  height: 100%;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.products-carousel .swiper-slide a:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Price styling */
+.products-carousel .text-red-600 {
+  position: relative;
+  display: inline-block;
+}
+
+/* Add a subtle animation for discount prices */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.products-carousel .text-red-600 {
+  animation: pulse 2s infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+
+  .products-carousel .swiper-button-next,
+  .products-carousel .swiper-button-prev {
+    display: none;
+  }
+}
+
+/* Hero Banner Styling */
+.hero-banner {
+  --swiper-navigation-size: 30px;
+  --swiper-theme-color: #ffffff;
+}
+
+.hero-banner .swiper-button-next,
+.hero-banner .swiper-button-prev {
+  background-color: rgba(0, 0, 0, 0.3);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.hero-banner .swiper-button-next:hover,
+.hero-banner .swiper-button-prev:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.hero-banner .swiper-button-next:after,
+.hero-banner .swiper-button-prev:after {
+  font-size: 22px;
+}
+
+.hero-banner .swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  background: white;
+  opacity: 0.7;
+}
+
+.hero-banner .swiper-pagination-bullet-active {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* Cursor for clickable banner */
+.hero-banner .swiper-slide {
+  cursor: pointer;
+}
+
+/* Flash Sale Styling */
+.flash-sale-swiper {
+  --swiper-navigation-size: 20px;
+  --swiper-theme-color: #ffffff;
+  padding: 0 10px;
+}
+
+.flash-sale-swiper .swiper-button-next,
+.flash-sale-swiper .swiper-button-prev {
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: white;
+}
+
+.flash-sale-swiper .swiper-button-next:after,
+.flash-sale-swiper .swiper-button-prev:after {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.flash-sale-swiper .swiper-button-disabled {
+  opacity: 0;
+  cursor: auto;
+  pointer-events: none;
+}
+
+/* Flash sale countdown animation */
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.flash-sale-countdown {
+  animation: blink 1s infinite;
+}
