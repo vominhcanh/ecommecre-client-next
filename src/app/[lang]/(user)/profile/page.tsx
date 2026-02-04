@@ -74,7 +74,7 @@ export default function ProfilePage() {
                         <Input
                             label="Full Name"
                             variant="bordered"
-                            defaultValue={user.name || "Demo User"}
+                            defaultValue={user.full_name || "Demo User"}
                             startContent={<Icon icon="solar:user-linear" />}
                         />
                         <Input

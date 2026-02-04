@@ -25,10 +25,12 @@ export default function Header({
   menuData,
   locales,
   storeData,
+  lang,
 }: {
   menuData: MenuData | null;
   locales: Language[];
   storeData?: StoreType | null;
+  lang: string;
 }) {
   const { t } = useClientTranslation();
   useHydrateStore(storeData || null);
@@ -118,7 +120,7 @@ export default function Header({
   return (
     <>
       <motion.header
-        className={cn('sticky top-0 z-[9999] w-full bg-white shadow-sm transition-all duration-300', {
+        className={cn('sticky top-0 z-[50] w-full bg-white shadow-sm transition-all duration-300', {
           'shadow-md': isScrolled,
         })}
         initial={{ y: -100 }}
@@ -144,19 +146,16 @@ export default function Header({
                 </Button>
               </div>
 
-              <Link href='/' className='flex items-center'>
-                {storeData?.avatar ? (
-                  <div className='relative h-10 w-32'>
-                    <Image
-                      src={storeData.avatar}
-                      alt={storeData.name || 'Store Logo'}
-                      fill
-                      className='object-contain object-left'
-                    />
-                  </div>
-                ) : (
-                  <span className='text-xl font-bold text-black'>LOGO</span>
-                )}
+              <Link href={`/${lang}`} className='flex items-center'>
+                <div className='relative h-10 w-32'>
+                  <Image
+                    src={storeData?.avatar || ''}
+                    alt={storeData?.name || 'Store Logo'}
+                    fill
+                    sizes="150px"
+                    className='object-contain object-left'
+                  />
+                </div>
               </Link>
               <div className='flex items-center gap-2'>
                 <Badge content='2' color='danger' size='md'>
@@ -184,20 +183,18 @@ export default function Header({
 
             <div className='hidden lg:grid grid-cols-12 gap-8 items-center'>
               <div className='col-span-2 flex items-center justify-start'>
-                <Link href='/' className='relative block'>
-                  {storeData?.avatar ? (
-                    <div className='relative h-20 w-52 transition-opacity hover:opacity-90'>
-                      <Image
-                        src={storeData.avatar}
-                        alt={storeData.name || 'Store Logo'}
-                        fill
-                        className='object-contain object-left'
-                        priority
-                      />
-                    </div>
-                  ) : (
-                    <span className='text-2xl font-bold tracking-tight text-gray-900'>LOGO</span>
-                  )}
+                <Link href={`/${lang}`} className='relative block'>
+                  <div className='relative h-20 w-52 transition-opacity hover:opacity-90'>
+                    <Image
+                      src={storeData?.avatar || ''}
+                      alt={storeData?.name || 'Store Logo'}
+                      fill
+                      sizes="200px"
+                      className='object-contain object-left'
+                      priority
+                    />
+                  </div>
+
                 </Link>
               </div>
 
@@ -254,14 +251,9 @@ export default function Header({
 
                 {/* Divider */}
                 <div className="h-8 w-px bg-gray-100 mx-1"></div>
-
-                {/* Cart & User Check */}
                 <div className='flex items-center gap-2 pl-1 flex-shrink-0'>
-                  {/* Cart */}
-                  <MiniCart />
-
-                  {/* Sign In / User Menu */}
-                  <UserMenu />
+                  <MiniCart lang={lang} />
+                  <UserMenu lang={lang} />
                 </div>
               </div>
             </div>
@@ -287,7 +279,7 @@ export default function Header({
                     'bg-gray-100 text-gray-700 hover:bg-gray-200': !isCategoriesOpen,
                   })}
                 >
-                  All Categories
+                  Danh mục sản phẩm
                 </Button>
 
                 <MegaMenu

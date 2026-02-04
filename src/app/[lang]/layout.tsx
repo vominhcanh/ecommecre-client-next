@@ -19,8 +19,9 @@ export async function generateStaticParams() {
 }
 
 export const generateMetadata = async ({ params }: LayoutProps) => {
+  const { lang } = await params;
   const { data } = await getBannerByCode(ApiKey.bannerHome, {
-    lang: params?.lang || 'en',
+    lang: lang || 'en',
   });
   const metaTitle = 'Acorneri Holdings ';
   const metaDescription = data?.details?.[0]?.description || '';
@@ -42,7 +43,7 @@ async function HeaderWithData({ lang, storeData }: { lang: string; storeData: St
   const locales = await getLocalesSetting();
   const menuData = await getMenuByCode(ApiKey.menu, { lang });
 
-  return <Header menuData={menuData} locales={locales} storeData={storeData} />;
+  return <Header menuData={menuData} locales={locales} storeData={storeData} lang={lang} />;
 }
 
 // Loading component cho Header
@@ -55,15 +56,16 @@ function HeaderSkeleton() {
 }
 
 export default async function Layout({ children, params }: LayoutProps) {
+  const { lang } = await params;
   const dataStore = await getStoreByToken({
-    lang: params?.lang,
+    lang,
   });
 
   return (
     <RootLayout params={params}>
       <main className='flex min-h-screen flex-col'>
         <Suspense fallback={<HeaderSkeleton />}>
-          <HeaderWithData lang={params.lang} storeData={dataStore} />
+          <HeaderWithData lang={lang} storeData={dataStore} />
         </Suspense>
         <div>{children}</div>
         <Footer storeData={dataStore} />

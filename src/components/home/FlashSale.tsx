@@ -6,24 +6,19 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { ProductData } from '@/types/product.type';
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
 
-type FlashSaleProduct = {
-  id: string;
-  name: string;
-  slug: string;
-  image: string;
-  price: number;
-  originalPrice: number;
-  discountPercent: number;
-  remainingQuantity: number;
-  totalQuantity: number;
-};
+interface FlashSaleProps {
+  products: ProductData[];
+  lang: string;
+  endTime?: Date; // Optional prop to override timer
+}
 
-export default function FlashSale() {
+export default function FlashSale({ products, lang, endTime }: FlashSaleProps) {
   const { t } = useClientTranslation();
   const [timeLeft, setTimeLeft] = useState({
     hours: 0,
@@ -31,14 +26,17 @@ export default function FlashSale() {
     seconds: 0,
   });
 
-  // Set end time to 23:59:59 of the current day
+  // Set end time logic
   useEffect(() => {
     const calculateTimeLeft = () => {
       const now = new Date();
-      const endOfDay = new Date();
-      endOfDay.setHours(23, 59, 59, 999);
+      const targetTime = endTime ? new Date(endTime) : new Date();
+      if (!endTime) {
+        // Default to end of day if no endTime provided
+        targetTime.setHours(23, 59, 59, 999);
+      }
 
-      const difference = endOfDay.getTime() - now.getTime();
+      const difference = targetTime.getTime() - now.getTime();
 
       if (difference > 0) {
         setTimeLeft({
@@ -55,82 +53,14 @@ export default function FlashSale() {
     const timer = setInterval(calculateTimeLeft, 1000);
 
     return () => clearInterval(timer);
-  }, []);
-
-  // Sample flash sale products
-  const flashSaleProducts: FlashSaleProduct[] = [
-    {
-      id: '1',
-      name: 'iPhone 15 Pro Max 256GB',
-      slug: 'iphone-15-pro-max-256gb',
-      image: '/images/products/headphones.jpg',
-      price: 1099.99,
-      originalPrice: 1299.99,
-      discountPercent: 15,
-      remainingQuantity: 8,
-      totalQuantity: 20,
-    },
-    {
-      id: '2',
-      name: 'Samsung Galaxy S24 Ultra 512GB',
-      slug: 'samsung-galaxy-s24-ultra-512gb',
-      image: '/images/products/chair.jpg',
-      price: 1199.99,
-      originalPrice: 1399.99,
-      discountPercent: 14,
-      remainingQuantity: 5,
-      totalQuantity: 15,
-    },
-    {
-      id: '3',
-      name: 'Google Pixel 8 Pro 256GB',
-      slug: 'google-pixel-8-pro-256gb',
-      image: '/images/products/watch.jpg',
-      price: 899.99,
-      originalPrice: 999.99,
-      discountPercent: 10,
-      remainingQuantity: 12,
-      totalQuantity: 25,
-    },
-    {
-      id: '4',
-      name: 'OnePlus 12 256GB',
-      slug: 'oneplus-12-256gb',
-      image: '/images/products/tshirt.jpg',
-      price: 799.99,
-      originalPrice: 899.99,
-      discountPercent: 11,
-      remainingQuantity: 7,
-      totalQuantity: 18,
-    },
-    {
-      id: '5',
-      name: 'Xiaomi 14 Ultra 512GB',
-      slug: 'xiaomi-14-ultra-512gb',
-      image: '/images/products/camera.jpg',
-      price: 899.99,
-      originalPrice: 1099.99,
-      discountPercent: 18,
-      remainingQuantity: 3,
-      totalQuantity: 10,
-    },
-    {
-      id: '6',
-      name: 'Apple AirPods Pro 2',
-      slug: 'apple-airpods-pro-2',
-      image: '/images/products/earbuds.jpg',
-      price: 199.99,
-      originalPrice: 249.99,
-      discountPercent: 20,
-      remainingQuantity: 15,
-      totalQuantity: 30,
-    },
-  ];
+  }, [endTime]);
 
   // Format time with leading zeros
   const formatTime = (time: number) => {
     return time < 10 ? `0${time}` : time;
   };
+
+  if (!products || products.length === 0) return null;
 
   return (
     <section className='py-6'>
@@ -138,22 +68,22 @@ export default function FlashSale() {
         {/* Flash Sale Header */}
         <div className='mb-6 flex items-center justify-between'>
           <div className='flex items-center'>
-            <h2 className='mr-4 text-2xl font-bold text-white'>{t('flashSale')}</h2>
+            <h2 className='mr-4 text-2xl font-bold text-gray-900 uppercase italic'>{t('flashSale')}</h2>
             <div className='flex items-center space-x-1'>
-              <div className='rounded bg-white px-2 py-1 font-bold text-red-600'>
+              <div className='rounded bg-black px-2 py-1 font-bold text-white'>
                 {formatTime(timeLeft.hours)}
               </div>
-              <span className='font-bold text-white'>:</span>
-              <div className='rounded bg-white px-2 py-1 font-bold text-red-600'>
+              <span className='font-bold text-gray-900'>:</span>
+              <div className='rounded bg-black px-2 py-1 font-bold text-white'>
                 {formatTime(timeLeft.minutes)}
               </div>
-              <span className='font-bold text-white'>:</span>
-              <div className='rounded bg-white px-2 py-1 font-bold text-red-600'>
+              <span className='font-bold text-gray-900'>:</span>
+              <div className='rounded bg-black px-2 py-1 font-bold text-white'>
                 {formatTime(timeLeft.seconds)}
               </div>
             </div>
           </div>
-          <Link href='/flash-sale' className='flex items-center text-white hover:underline'>
+          <Link href={`/${lang}/flash-sale`} className='flex items-center text-primary hover:underline font-medium'>
             {t('viewAll')}
             <svg
               xmlns='http://www.w3.org/2000/svg'
@@ -185,55 +115,64 @@ export default function FlashSale() {
                 slidesPerView: 5,
               },
             }}
-            className='flash-sale-swiper'
+            className='flash-sale-swiper !pb-2'
           >
-            {flashSaleProducts.map(product => (
-              <SwiperSlide key={product.id}>
-                <Link href={`/products/${product.slug}`} className='block'>
-                  <div className='flex h-full flex-col overflow-hidden rounded-lg bg-white'>
-                    {/* Product Image */}
-                    <div className='relative pt-[100%]'>
-                      <Image src={product.image} alt={product.name} fill className='object-cover' />
-                      <div className='absolute left-2 top-2 rounded bg-red-600 px-2 py-1 text-xs font-bold text-white'>
-                        -{product.discountPercent}%
+            {products.map(product => {
+              const totalQty = (product.sold_count || 0) + (product.qty_selling || 0);
+              const soldPercent = totalQty > 0 ? (product.sold_count / totalQty) * 100 : 0;
+
+              return (
+                <SwiperSlide key={product.id}>
+                  <Link href={`/${lang}/product/${product.slug}`} className='block h-full'>
+                    <div className='flex h-full flex-col overflow-hidden rounded-lg border border-gray-100 bg-white hover:shadow-md transition-shadow'>
+                      {/* Product Image */}
+                      <div className='relative pt-[100%]'>
+                        <Image src={product.thumbnail || '/images/placeholder.png'} alt={product.name} fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw" className='object-contain p-2' />
+                        {product.percentage_price_old && product.percentage_price_old !== '0%' && (
+                          <div className='absolute left-2 top-2 rounded bg-red-600 px-2 py-1 text-xs font-bold text-white'>
+                            -{product.percentage_price_old}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Product Info */}
+                      <div className='flex flex-grow flex-col p-3'>
+                        <h3 className='mb-2 line-clamp-2 min-h-[40px] text-sm font-medium text-gray-700'>
+                          {product.name}
+                        </h3>
+                        <div className='mt-auto'>
+                          <div className='flex items-center justify-between flex-wrap gap-1'>
+                            <div>
+                              <p className='font-bold text-primary'>{product.price_formatted}</p>
+                              {product.original_price > product.price && (
+                                <p className='text-xs text-gray-400 line-through'>
+                                  {product.original_price_formatted}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className='mt-2'>
+                            <div className='flex items-center justify-between text-[10px] text-gray-500 mb-1'>
+                              <span>{t('sold') || 'Sold'}: {product.sold_count}</span>
+                            </div>
+                            <div className='h-3 w-full rounded-full bg-gray-200 relative overflow-hidden'>
+                              <div
+                                className='h-full rounded-full bg-primary'
+                                style={{
+                                  width: `${soldPercent}%`,
+                                }}
+                              ></div>
+                            </div>
+                          </div>
+
+                        </div>
                       </div>
                     </div>
-
-                    {/* Product Info */}
-                    <div className='flex flex-grow flex-col p-3'>
-                      <h3 className='mb-2 line-clamp-1 text-sm font-medium text-gray-500'>
-                        {product.name}
-                      </h3>
-                      <div className='mt-auto'>
-                        <div className='flex items-center justify-between'>
-                          <div>
-                            <p className='font-bold text-red-600'>${product.price.toFixed(2)}</p>
-                            <p className='text-xs text-gray-500 line-through'>
-                              ${product.originalPrice.toFixed(2)}
-                            </p>
-                          </div>
-                          <div className='text-xs text-gray-500'>
-                            Còn {product.remainingQuantity}
-                          </div>
-                        </div>
-
-                        {/* Progress bar */}
-                        <div className='mt-2 h-2 w-full rounded-full bg-gray-200'>
-                          <div
-                            className='h-2 rounded-full bg-red-600'
-                            style={{
-                              width: `${
-                                (product.remainingQuantity / product.totalQuantity) * 100
-                              }%`,
-                            }}
-                          ></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </SwiperSlide>
-            ))}
+                  </Link>
+                </SwiperSlide>
+              )
+            })}
           </Swiper>
         </div>
       </div>

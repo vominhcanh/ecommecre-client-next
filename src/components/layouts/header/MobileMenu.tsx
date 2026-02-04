@@ -56,13 +56,13 @@ export default function MobileMenu({ isOpen, onClose, menuItems, locales }: Mobi
                                         isBordered
                                         className="ring-2 ring-white"
                                         color="primary"
-                                        name={user.name?.charAt(0).toUpperCase()}
+                                        name={user.full_name?.charAt(0).toUpperCase()}
                                         size="md"
                                         src={user.avatar || `https://i.pravatar.cc/150?u=${user.email}`}
                                     />
                                     <div>
                                         <h4 className='font-bold text-gray-900 text-sm'>
-                                            {user.name}
+                                            {user.full_name}
                                         </h4>
                                         <p className='text-xs text-gray-500 mb-1'>{user.email}</p>
                                         <div className="flex gap-3 text-xs font-medium">

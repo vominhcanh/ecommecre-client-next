@@ -1,14 +1,16 @@
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { CartItem } from '@/types/cart.type';
-import { User } from '@/types/user.type';
+import { UserData } from '@/types/user.type';
 import { StoreType } from '@/types/store.type';
+import { LocalStorageKey } from '@/utils/enums.utils';
+import { ResponseData } from '@/types/api.type';
 
 // Cart Atoms
-export const cartState = atomWithStorage<CartItem[]>('cart-items', []);
+export const cartState = atomWithStorage<CartItem[]>(LocalStorageKey.CART, []);
 
 // User Atoms
-export const userState = atomWithStorage<User>('user-state', {
+export const userState = atomWithStorage<UserData>(LocalStorageKey.USER, {
   isLoggedIn: false,
 });
 

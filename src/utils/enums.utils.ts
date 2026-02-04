@@ -2,11 +2,14 @@
 export enum LocalStorageKey {
   TOKEN = 'jwt',
   STORE_ID = 'store_id',
+  USER = 'user-state',
+  CART = 'cart-state',
 }
 
 export enum CookieKey {
   SESSION_KEY = 'sessionIdCookie',
   TOKEN_KEY = 'token',
+  CART_SESSION_ID = 'cart_session_id',
 }
 
 export enum ScreenSize {
@@ -52,4 +55,14 @@ export enum BannerType {
   PRODUCT = 'PRODUCT',
   NEWS = 'NEWS',
   CATEGORY = 'CATEGORY',
+}
+
+export enum QueryKey {
+  CART = 'cart',
+  PRODUCTS = 'products',
+  CATEGORIES = 'categories',
+  STORES = 'stores',
+  USER = 'user',
+  ADDRESS = 'address',
+  VOUCHERS = 'vouchers',
 }

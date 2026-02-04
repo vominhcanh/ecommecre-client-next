@@ -1,15 +1,16 @@
 import type { Metadata } from 'next';
 import { useServerTranslation } from '@/lib/i18n';
-import LoginClient from './LoginClient';
+import { Suspense } from 'react';
+import { DefaultParams } from '@/types/api.type';
+import LoginClient from '@/components/auth/LoginClient';
 
 interface Props {
-    params: {
-        lang: string;
-    };
+    params: Promise<DefaultParams>
 }
 
-export async function generateMetadata({ params: { lang } }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
     try {
+        const { lang } = await params;
         const { t } = await useServerTranslation(lang);
         return {
             title: t('login'),
@@ -21,7 +22,6 @@ export async function generateMetadata({ params: { lang } }: Props): Promise<Met
     }
 }
 
-import { Suspense } from 'react';
 
 export default function LoginPage() {
     return (

@@ -5,43 +5,47 @@ import { funcUtils } from '@/utils/func.utils';
  * HTTP client wrapper for API calls with improved error handling
  */
 export const fetchApp = {
-  get: async <T = Record<string, unknown>>(
+  get: async <TResponse = unknown>(
     url: string,
     params?: Params,
-  ): Promise<PromiseResponse<T>> => {
+  ): PromiseResponse<TResponse> => {
     try {
       const response = await fetch(funcUtils.combineURL(url, params), funcUtils.fetchHeaders());
 
       if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        if (errorData) throw errorData;
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
       const data = await response.json();
       return data;
     } catch (error) {
-      funcUtils.notify('error', 'Không thể tải dữ liệu. Vui lòng thử lại.');
+      // funcUtils.notify('error', 'Không thể tải dữ liệu. Vui lòng thử lại.');
       throw error;
     }
   },
 
-  post: async <T = Record<string, unknown>>(url: string, payload: T): Promise<PromiseResponse<T>> => {
+  post: async <TResponse = unknown, TData = unknown>(url: string, payload: TData): PromiseResponse<TResponse> => {
     try {
       const body = JSON.stringify(payload);
       const response = await fetch(url, funcUtils.postHeaders(body));
 
       if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        if (errorData) throw errorData;
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
       const data = await response.json();
       return data;
     } catch (error) {
-      funcUtils.notify('error', 'Không thể gửi dữ liệu. Vui lòng thử lại.');
+      // funcUtils.notify('error', 'Không thể gửi dữ liệu. Vui lòng thử lại.');
       throw error;
     }
   },
 
-  put: async <T = Record<string, unknown>>(url: string, payload: T): Promise<PromiseResponse<T>> => {
+  put: async <TResponse = unknown, TData = unknown>(url: string, payload: TData): PromiseResponse<TResponse> => {
     try {
       const body = JSON.stringify(payload);
       const response = await fetch(url, {
@@ -51,18 +55,20 @@ export const fetchApp = {
       });
 
       if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        if (errorData) throw errorData;
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
       const data = await response.json();
       return data;
     } catch (error) {
-      funcUtils.notify('error', 'Không thể cập nhật. Vui lòng thử lại.');
+      // funcUtils.notify('error', 'Không thể cập nhật. Vui lòng thử lại.');
       throw error;
     }
   },
 
-  delete: async (url: string, params?: Params): Promise<PromiseResponse<unknown>> => {
+  delete: async <TResponse = unknown>(url: string, params?: Params): PromiseResponse<TResponse> => {
     try {
       const response = await fetch(funcUtils.combineURL(url, params), {
         method: 'DELETE',
@@ -70,18 +76,20 @@ export const fetchApp = {
       });
 
       if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        if (errorData) throw errorData;
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
       const data = await response.json();
       return data;
     } catch (error) {
-      funcUtils.notify('error', 'Không thể xóa. Vui lòng thử lại.');
+      // funcUtils.notify('error', 'Không thể xóa. Vui lòng thử lại.');
       throw error;
     }
   },
 
-  postFile: async (url: string, formData: FormData): Promise<PromiseResponse<unknown>> => {
+  postFile: async <TResponse = unknown>(url: string, formData: FormData): PromiseResponse<TResponse> => {
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -90,12 +98,14 @@ export const fetchApp = {
       });
 
       if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        if (errorData) throw errorData;
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
       const data = await response.json();
       return data;
     } catch (error) {
-      funcUtils.notify('error', 'Không thể tải file lên. Vui lòng thử lại.');
+      // funcUtils.notify('error', 'Không thể tải file lên. Vui lòng thử lại.');
       throw error;
     }
   },

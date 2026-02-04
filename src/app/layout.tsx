@@ -40,8 +40,8 @@ const gilroy = localFont({
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={gilroy.variable}>
-      <body className="font-sans antialiased">
+    <html lang="en" className={gilroy.variable} suppressHydrationWarning>
+      <body className="font-sans antialiased bg-gray-50">
         {children}
       </body>
     </html>

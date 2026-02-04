@@ -24,6 +24,7 @@ export type Meta = {
 };
 
 export type ResponseData<T = unknown> = {
+  token?: string;
   data?: T;
   meta?: Meta;
   message?: string;
@@ -42,19 +43,21 @@ export type ArgMutate<T = unknown> = {
 
 export type DefaultParams = {
   lang: string;
+  slug?: string;
+
 };
 
 export type LayoutProps<T extends Record<string, string> | DefaultParams = DefaultParams> = {
   children: React.ReactNode;
-  params: T;
+  params: Promise<T>;
 };
 
 export type RouteProps<
   Params extends Record<string, string> = Record<string, string>,
   Search extends Record<string, string> = Record<string, string>,
 > = {
-  params: Params;
-  searchParams: Partial<Search & Record<string, string>>;
+  params: Promise<Params>;
+  searchParams: Promise<Partial<Search & Record<string, string>>>;
 };
 
 export type StoreData = {

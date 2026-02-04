@@ -30,7 +30,7 @@ export function Providers({ children }: ProvidersProps) {
       <JotaiProvider>
         <HeroUIProvider>
           <NextThemesProvider attribute='class' defaultTheme='light' themes={['light', 'dark']}>
-            <ToastProvider />
+            <ToastProvider placement='top-right' maxVisibleToasts={1} toastProps={{ timeout: 2000 }} />
             <main>{children}</main>
           </NextThemesProvider>
         </HeroUIProvider>

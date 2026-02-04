@@ -44,13 +44,9 @@ const funcUtils = {
   // ====== AuthHeader
   fetchHeaders: (host?: string | null) => {
     const tokenUser = getCookie(CookieKey.TOKEN_KEY);
-
-    // xác định xem có phải là server đang gọi hàm hay không (để xử lý revalidate)
     const isServer = typeof window === 'undefined';
-
     const serverHeader = isServer
       ? {
-        // cập nhật cache trên server sau 60s
         next: { revalidate: 10 },
       }
       : undefined;
@@ -59,20 +55,20 @@ const funcUtils = {
       ...serverHeader,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${tokenUser ?? STORE_TOKEN}`,
+        Authorization: `Bearer ${tokenUser || STORE_TOKEN}`,
         Origin: host || '',
       },
-      method: 'GET',
-    } as FetchHeaders;
+    };
     return fetchHeaders;
   },
 
   postHeaders: (body: string) => {
+    const tokenUser = getCookie(CookieKey.TOKEN_KEY);
     const fetchHeaders = {
       cache: 'no-cache',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${STORE_TOKEN}`,
+        Authorization: `Bearer ${tokenUser || STORE_TOKEN}`,
       },
       method: 'POST',
       body: body,
@@ -81,10 +77,11 @@ const funcUtils = {
   },
 
   postFileHeaders: () => {
+    const tokenUser = getCookie(CookieKey.TOKEN_KEY);
     const fetchHeaders = {
       cache: 'no-cache',
       headers: {
-        Authorization: `Bearer ${STORE_TOKEN}`,
+        Authorization: `Bearer ${tokenUser || STORE_TOKEN}`,
       },
     } as FetchHeaders;
     return fetchHeaders;
@@ -233,6 +230,27 @@ const funcUtils = {
     }
 
     return undefined;
+  },
+
+  getErrorMessage: (error: TypeError & { errors?: string[] }): string => {
+    if (error?.errors) {
+      const errorMessages = Object.values(error.errors)
+        .flat()
+        .map((msg) => `- ${msg}`)
+        .join('\n');
+      if (errorMessages) {
+        return errorMessages;
+      }
+    }
+    return error?.message || 'Error';
+  },
+
+  debounce: <T extends (...args: any[]) => any>(func: T, wait: number) => {
+    let timeout: NodeJS.Timeout;
+    return (...args: Parameters<T>) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), wait);
+    };
   },
 };
 

@@ -67,6 +67,13 @@ const config: Config = {
       animation: {
         'phone-rotate': 'phone-rotate 3s ease-in-out infinite',
       },
+      backgroundColor: {
+        primary: '#186770',
+        secondary: '#7828C8',
+        success: '#17C964',
+        warning: '#F5A524',
+        orange: '#FF8924',
+      },
     },
   },
   darkMode: 'class',

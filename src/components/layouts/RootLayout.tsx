@@ -8,7 +8,7 @@ export default async function RootLayout({
   children,
   params,
 }: LayoutProps) {
-  const { lang } = params;
+  const { lang } = await params;
   const resources = await getResources();
   const locales = await getLocalesSetting();
 
@@ -20,7 +20,7 @@ export default async function RootLayout({
   return (
     <Providers>
       <I18nResources resources={resources} lang={lang} />
-        {children}
+      {children}
     </Providers>
   );
 }
